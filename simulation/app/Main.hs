@@ -65,7 +65,7 @@ fstep atoms = fTot atoms atoms
 fOne :: Atom -> [Atom] -> [V3 Float]
 fOne atom = fmap (f atom)
   where f a b = if (i a==i b) then 0 else lennardJones a b
-        lennardJones a b = (1 / (norm d)^14 - 0.5 / (norm d)^8) *^ d
+        lennardJones a b = (1 / (norm d)^(14 :: Integer) - 0.5 / (norm d)^(8 :: Integer)) *^ d
           where d = (r b) ^-^ (r a)
 
 {- velocity Verlet algorithm -}
@@ -97,7 +97,7 @@ mainAnim = simulate options refreshRate initConfig draw update
 
 {- initialize a n x n x n cubical grid as the initial atom configuration -}
 grid :: Int -> [Atom]
-grid nGrid = zipWith3 Atom [1..(nGrid^3)] (cube nGrid nGrid) (replicate (nGrid^3) (V3 0 0 0))
+grid nGrid = zipWith3 Atom [1..(nGrid^(3 :: Integer))] (cube nGrid nGrid) (replicate (nGrid^(3 :: Integer)) (V3 0 0 0))
   where cube _ 0 = []
         cube d i = square d d z ++ cube d (i-1)
           where z = s/2 - (fromIntegral i * s/fromIntegral (d+1))
