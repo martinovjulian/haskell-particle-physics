@@ -36,8 +36,6 @@ data Atom = Atom { i :: Int,       -- index in the array
                    r :: V3 Float,  -- position vector
                    _v :: V3 Float } -- velocity vector
 
-instance Show Atom where
-  show (Atom i r v) = show i ++ ": r=" ++ show r ++ ", v=" ++ show v
 
 {- position update in linear time -}
 rstep :: Float -> Atom -> V3 Float -> Atom
