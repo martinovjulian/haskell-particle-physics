@@ -39,8 +39,8 @@ data Atom = Atom { i :: Int,       -- index in the array
 
 {- position update in linear time -}
 rstep :: Float -> Atom -> V3 Float -> Atom
-rstep timeStepR (Atom i r v) a = Atom i r' v
-  where r' = r ^+^ (v ^* timeStepR) ^+^ (0.5*timeStepR**2 *^ a)
+rstep timeStepR (Atom iRStep rRStep vRStep) a = Atom iRStep r' vRStep
+  where r' = rRStep ^+^ (vRStep ^* timeStepR) ^+^ (0.5*timeStepR**2 *^ a)
 
 {- velocity update in linear time -}
 vstep :: Float -> Atom -> V3 Float -> Atom
@@ -102,8 +102,8 @@ grid nGrid = zipWith3 Atom [1..(nGrid^(3 :: Integer))] (cube nGrid nGrid) (repli
 
 square :: Int -> Int -> Float -> [V3 Float]
 square _ 0 _ = []
-square d i z = row d d y ++ square d (i-1) z
-  where y = s/2 - (fromIntegral i * s/fromIntegral (d+1))
+square d iSq z = row d d y ++ square d (iSq-1) z
+  where y = s/2 - (fromIntegral iSq * s/fromIntegral (d+1))
         row _ 0 _ = []
         row dSquare iSquare ySquare = V3 x y z : row dSquare (iSquare-1) ySquare
           where x = s/2 - (fromIntegral iSquare * s/fromIntegral (dSquare+1))
