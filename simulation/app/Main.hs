@@ -44,9 +44,9 @@ rstep timeStepR (Atom iRStep rRStep vRStep) a = Atom iRStep r' vRStep
 
 {- velocity update in linear time -}
 vstep :: Float -> Atom -> V3 Float -> Atom
-vstep timeStepV atom a = Atom i r v'
-  where (Atom i r v) = atom
-        v' = (bound atom) * (v + (0.5 * timeStepV) *^ a)
+vstep vVstep atom a = Atom iVStep rVstep v'
+  where (Atom iVStep rVstep v) = atom
+        v' = (bound atom) * (v + (0.5 * vVstep) *^ a)
         bound (Atom _ (V3 x y z) _) = V3 xf yf zf -- enforces rigid wall boundary condition
           where xf = if (abs x + rad > s/2) then (-1) else 1
                 yf = if (abs y + rad > s/2) then (-1) else 1
@@ -97,8 +97,8 @@ mainAnim = simulate options refreshRate initConfig draw update
 grid :: Int -> [Atom]
 grid nGrid = zipWith3 Atom [1..(nGrid^(3 :: Integer))] (cube nGrid nGrid) (replicate (nGrid^(3 :: Integer)) (V3 0 0 0))
   where cube _ 0 = []
-        cube d i = square d d z ++ cube d (i-1)
-          where z = s/2 - (fromIntegral i * s/fromIntegral (d+1))
+        cube d iGrid = square d d z ++ cube d (iGrid-1)
+          where z = s/2 - (fromIntegral iGrid * s/fromIntegral (d+1))
 
 square :: Int -> Int -> Float -> [V3 Float]
 square _ 0 _ = []
